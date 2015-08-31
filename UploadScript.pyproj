@@ -5,7 +5,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{59c6854e-1c21-45ce-bc44-35917eafd68d}</ProjectGuid>
     <ProjectHome />
-    <StartupFile>create_scaling_policy.py</StartupFile>
+    <StartupFile>
+    </StartupFile>
     <SearchPath />
     <WorkingDirectory>.</WorkingDirectory>
     <OutputPath>.</OutputPath>
@@ -21,7 +22,7 @@
     <PtvsTargetsFile>$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets</PtvsTargetsFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="create_scaling_policy.py" />
+    <Compile Include="config.py" />
     <Compile Include="multipart_upload.py" />
     <Compile Include="photo_backup.py" />
   </ItemGroup>
