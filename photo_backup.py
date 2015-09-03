@@ -90,23 +90,30 @@ def upload(path, AWS_USER_ID, AWS_SECRET_KEY, BUCKET_NAME, ):
 
 
 def uploadIfHashDifferent(filepath, AWS_USER_ID, AWS_SECRET_KEY, BUCKET_NAME, ):
+    logging.info('Checking if upload needed for %s...', filepath)
+
+    if os.path.getsize(filepath) < 1:
+        logging.info('%s is empty', filepath)
+        return
+
     hash_path = filepath + '.md5'
     if os.path.exists(hash_path):
         with open(hash_path, 'rb') as hashf:
-            existingHash = hasf.read()
+            existingHash = hashf.read()
     else:
         existingHash = ''
 
-    logging.info('has for [%s] is [%s]', filepath, existingHash)
+    logging.info('hash for [%s] is [%s]', filepath, existingHash)
     with open(filepath, 'rb') as f:
         h = hashfile(f, hashlib.md5())
-        if h != existingHash:
-            logging.info("hash doesn't match")
-            logging.info('%s', existingHash)
-            logging.info('%s', h)
-            upload(filepath, AWS_USER_ID, AWS_SECRET_KEY, BUCKET_NAME, )
-            with open(hash_path, 'wb') as hashf:
-                hashf.write(h)
+
+    if h != existingHash:
+        logging.info("hash doesn't match")
+        logging.info('%s', existingHash)
+        logging.info('%s', h)
+        upload(filepath, AWS_USER_ID, AWS_SECRET_KEY, BUCKET_NAME, )
+        with open(hash_path, 'wb') as hashf:
+            hashf.write(h)
 
 
 def run(srcFolder, filepathpattern, AWS_USER_ID, AWS_SECRET_KEY, BUCKET_NAME, ):
@@ -121,7 +128,7 @@ def run(srcFolder, filepathpattern, AWS_USER_ID, AWS_SECRET_KEY, BUCKET_NAME, ):
         v.close()
 
     for filepath, _ in filepathsAndYears:
-        uploadIfHashDifferent(filepath)
+        uploadIfHashDifferent(filepath, AWS_USER_ID, AWS_SECRET_KEY, BUCKET_NAME, )
 
 
     #try:
