@@ -66,7 +66,7 @@ def upload(path, AWS_USER_ID, AWS_SECRET_KEY, BUCKET_NAME, ):
   mp = b.initiate_multipart_upload(os.path.basename(source_path))
 
 # Use a chunk size of 50 MiB (feel free to change this)
-  chunk_size = 52428800
+  chunk_size = 0x1000000 #changed to 
   chunk_count = int(math.ceil(source_size / float(chunk_size)))
 
   print 'source_size is', source_size
@@ -116,7 +116,22 @@ def uploadIfHashDifferent(filepath, AWS_USER_ID, AWS_SECRET_KEY, BUCKET_NAME, ):
             hashf.write(h)
 
 
+def addLoggingHandler():
+    import logging
+    import sys
+
+    root = logging.getLogger()
+    root.setLevel(logging.DEBUG)
+
+    ch = logging.StreamHandler(sys.stdout)
+    ch.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    ch.setFormatter(formatter)
+    root.addHandler(ch)
+
+
 def run(srcFolder, filepathpattern, AWS_USER_ID, AWS_SECRET_KEY, BUCKET_NAME, ):
+    addLoggingHandler()
     filepathsAndYears = [ (filepathpattern.format(x), x) for x in xrange(2000, datetime.date.today().year + 1) ]
     zipFiles = {}
     for filepath, year in filepathsAndYears:
@@ -129,13 +144,6 @@ def run(srcFolder, filepathpattern, AWS_USER_ID, AWS_SECRET_KEY, BUCKET_NAME, ):
 
     for filepath, _ in filepathsAndYears:
         uploadIfHashDifferent(filepath, AWS_USER_ID, AWS_SECRET_KEY, BUCKET_NAME, )
-
-
-    #try:
-    #    upload(filepath)
-    #except Exception as e:
-    #    logging.error('Upload failed %s', e)
-    #    traceback.print_exc()
 
 
 
