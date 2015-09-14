@@ -66,7 +66,7 @@ def upload(path, AWS_USER_ID, AWS_SECRET_KEY, BUCKET_NAME, ):
   mp = b.initiate_multipart_upload(os.path.basename(source_path))
 
 # Use a chunk size of 50 MiB (feel free to change this)
-  chunk_size = 0x1000000 #changed to 
+  chunk_size = 0x600000 #changed to 
   chunk_count = int(math.ceil(source_size / float(chunk_size)))
 
   print 'source_size is', source_size
