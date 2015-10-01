@@ -1,4 +1,4 @@
-
+﻿
 import datetime
 import os
 import zipfile
@@ -130,12 +130,14 @@ def addLoggingHandler():
     root.addHandler(ch)
 
 
-def run(srcFolder, filepathpattern, AWS_USER_ID, AWS_SECRET_KEY, BUCKET_NAME, ):
+def run(srcFolder, filepathpattern, AWS_USER_ID, AWS_SECRET_KEY, BUCKET_NAME, pwd='' ):
     addLoggingHandler()
     filepathsAndYears = [ (filepathpattern.format(x), x) for x in xrange(2000, datetime.date.today().year + 1) ]
     zipFiles = {}
     for filepath, year in filepathsAndYears:
         zipf = zipfile.ZipFile(filepath, 'w', zipfile.ZIP_STORED, True)
+        if pwd:
+            zipf.setpassword(pwd)
         zipFiles[year] = zipf
     zipdir(srcFolder, zipFiles)
 
